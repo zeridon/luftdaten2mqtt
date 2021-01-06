@@ -4,6 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+bottle = "*"
+paho-mqtt = "*"
 
 [dev-packages]
 pre-commit = "*"
