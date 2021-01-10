@@ -134,9 +134,9 @@ def publish(json, topic_prefix):
             # set device class if available, else set an icon to be better
             # looking
             if SENSOR_TYPES[str(item["value_type"])][2]:
-                payload["dev_cla"] = SENSOR_TYPES[str(item["value_type"])][2]
+                val["dev_cla"] = SENSOR_TYPES[str(item["value_type"])][2]
             else:
-                payload["icon"] = SENSOR_ICONS[str(item["value_type"])][0]
+                val["icon"] = SENSOR_ICONS[str(item["value_type"])][0]
 
             logging.debug("publishing to broker: '%s' '%s'",t , str(val))
             CLIENT.publish(topic=topic, payload=str(payload).replace("'", '"'), retain=False)
@@ -187,6 +187,6 @@ def run_server():
     )
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     setup()
     run_server()
