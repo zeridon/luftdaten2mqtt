@@ -139,7 +139,7 @@ def publish(json, topic_prefix):
                 val["icon"] = SENSOR_ICONS[str(item["value_type"])][0]
 
             logging.debug("publishing to broker: '%s' '%s'",t , str(val))
-            CLIENT.publish(topic=topic, payload=str(payload).replace("'", '"'), retain=False)
+            CLIENT.publish(topic=t, payload=str(val).replace("'", '"'), retain=False)
 
             # report data
             t = topic_prefix + "/" + str(item["value_type"])
