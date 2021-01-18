@@ -4,7 +4,6 @@ contains a JSON payload which will be transmitted over to an MQTT broker."""
 import paho.mqtt.client as mqtt
 import bottle
 import logging
-import datetime
 import os
 
 # TODO separate routes and logic
