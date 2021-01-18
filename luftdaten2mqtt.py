@@ -150,10 +150,39 @@ def status():
     return "OK"
 
 
+"""Simple page documenting what this is"""
+
+
 @application.get("/luftdaten")
+@application.get("/")
 def route_index():
-    # return page with current values
-    pass
+    return bottle.template("index")
+
+
+"""on_connect handler to disconnect and die in case of error"""
+
+
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        logging.info("Connected to broker %s", MQTT_HOST)
+    elif rc == 1:
+        logging.error("Can't connect to MQTT Broker %s. Incorrect protocol", MQTT_HOST)
+        os._exit(rc)
+    elif rc == 2:
+        logging.error("MQTT Broker %s Refused connection. Invalid Client ID", MQTT_HOST)
+        os._exit(rc)
+    elif rc == 3:
+        logging.error("MQTT Broker %s available ", MQTT_HOST)
+        os._exit(rc)
+    elif rc == 4:
+        logging.error("MQTT Broker %s Refused connection. Bad Username/Password", MQTT_HOST)
+        os._exit(rc)
+    elif rc == 5:
+        logging.error("MQTT Broker %s Refused connection. Not Authorized", MQTT_HOST)
+        os._exit(rc)
+    else:
+        logging.info("Reserved error code (%s), from Broker %s", rc, MQTT_HOST)
+        os._exit(rc)
 
 
 def setup():
@@ -167,14 +196,17 @@ def setup():
     global MQTT_TOPIC
     MQTT_TOPIC = os.getenv("MQTT_TOPIC", "luftdaten/")
     global MQTT_USER
-    MQTT_USER = os.getenv("MQTT_USER", "user")
+    MQTT_USER = os.getenv("MQTT_USER", "")
     global MQTT_PASS
-    MQTT_PASS = os.getenv("MQTT_PASS", "pass")
+    MQTT_PASS = os.getenv("MQTT_PASS", "")
 
     logging.debug("connecting to mqtt broker %s", MQTT_HOST)
     global CLIENT
     CLIENT = mqtt.Client(clean_session=True)
-    CLIENT.username_pw_set(username=MQTT_USER, password=MQTT_PASS)
+
+    CLIENT.on_connect = on_connect
+    if MQTT_USER and MQTT_PASS:
+        CLIENT.username_pw_set(username=MQTT_USER, password=MQTT_PASS)
 
     CLIENT.connect(MQTT_HOST)
     CLIENT.loop_start()
@@ -186,6 +218,6 @@ def run_server():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     setup()
     run_server()
