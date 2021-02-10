@@ -218,6 +218,18 @@ def run_server():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    """ Init loglevel and errorcheck it """
+    global LOG_LEVEL
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
+    numeric_level = getattr(logging, LOG_LEVEL.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError("Invalid log level: %s" % LOG_LEVEL)
+
+    """ setup logging """
+    logging.basicConfig(level=numeric_level)
+
+    """ Go for MQTT """
     setup()
+
+    """ Open server """
     run_server()
