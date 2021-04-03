@@ -34,6 +34,7 @@ SENSOR_SPS30_P1 = "SPS30_P1"
 SENSOR_PMS_P0 = "PMS_P0"
 SENSOR_PMS_P1 = "PMS_P1"
 SENSOR_PMS_P2 = "PMS_P2"
+SENSOR_RSSI = "signal"
 
 # map for sensors
 # SENSOR_NAME: [ Friendly Name, Unit of measurement, Device class ]
@@ -59,6 +60,7 @@ SENSOR_TYPES = {
     SENSOR_PMS_P0: ["PM1", VOLUME_MICROGRAMS_PER_CUBIC_METER, None],
     SENSOR_PMS_P1: ["PM10", VOLUME_MICROGRAMS_PER_CUBIC_METER, None],
     SENSOR_PMS_P2: ["PM2.5", VOLUME_MICROGRAMS_PER_CUBIC_METER, None],
+    SENSOR_RSSI: ["RSSI", "dB", "signal_strength"],
 }
 
 # icons for sensors that have no class
