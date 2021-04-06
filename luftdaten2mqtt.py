@@ -36,6 +36,11 @@ SENSOR_PMS_P1 = "PMS_P1"
 SENSOR_PMS_P2 = "PMS_P2"
 SENSOR_RSSI = "signal"
 
+# template placeholders
+TEMPLATE_TEMPERATURE = "{{value|float|round(1)}}"
+TEMPLATE_HUMIDITY = "{{value|float|round(0)}}"
+TEMPLATE_PRESSURE = "{{(value/100|float)|round(1)}}"
+
 # map for sensors
 # SENSOR_NAME: [ Friendly Name, Unit of measurement, Device class ]
 SENSOR_TYPES = {
@@ -43,11 +48,11 @@ SENSOR_TYPES = {
     SENSOR_HUMIDITY: ["Humidity", "%", "humidity"],
     SENSOR_BME280_TEMPERATURE: ["Temperature", TEMP_CELSIUS, "temperature"],
     SENSOR_BME280_HUMIDITY: ["Humidity", "%", "humidity"],
-    SENSOR_BME280_PRESSURE: ["Pressure", "Pa", "pressure"],
+    SENSOR_BME280_PRESSURE: ["Pressure", "hPa", "pressure"],
     SENSOR_BMP_TEMPERATURE: ["Temperature", TEMP_CELSIUS, "temperature"],
-    SENSOR_BMP_PRESSURE: ["Pressure", "Pa", "pressure"],
+    SENSOR_BMP_PRESSURE: ["Pressure", "hPa", "pressure"],
     SENSOR_BMP280_TEMPERATURE: ["Temperature", TEMP_CELSIUS, "temperature"],
-    SENSOR_BMP280_PRESSURE: ["Pressure", "Pa", "pressure"],
+    SENSOR_BMP280_PRESSURE: ["Pressure", "hPa", "pressure"],
     SENSOR_PM1: ["PM10", VOLUME_MICROGRAMS_PER_CUBIC_METER, None],
     SENSOR_PM2: ["PM2.5", VOLUME_MICROGRAMS_PER_CUBIC_METER, None],
     SENSOR_WIFI_SIGNAL: ["Wifi signal", "dBm", "signal_strength"],
@@ -75,6 +80,22 @@ SENSOR_ICONS = {
     SENSOR_PMS_P1: ["mdi:thought-bubble"],
     SENSOR_PMS_P2: ["mdi:thought-bubble-outline"],
 }
+
+# map for value templates
+VALUE_TEMPLATES = {
+    SENSOR_BME280_HUMIDITY: [TEMPLATE_HUMIDITY],
+    SENSOR_BME280_PRESSURE: [TEMPLATE_PRESSURE],
+    SENSOR_BME280_TEMPERATURE: [TEMPLATE_TEMPERATURE],
+    SENSOR_BMP280_PRESSURE: [TEMPLATE_PRESSURE],
+    SENSOR_BMP280_TEMPERATURE: [TEMPLATE_TEMPERATURE],
+    SENSOR_BMP_PRESSURE: [TEMPLATE_PRESSURE],
+    SENSOR_BMP_TEMPERATURE: [TEMPLATE_TEMPERATURE],
+    SENSOR_HTU21D_HUMIDITY: [TEMPLATE_HUMIDITY],
+    SENSOR_HTU21D_TEMPERATURE: [TEMPLATE_TEMPERATURE],
+    SENSOR_HUMIDITY: [TEMPLATE_HUMIDITY],
+    SENSOR_TEMPERATURE: [TEMPLATE_TEMPERATURE],
+}
+
 
 application = bottle.default_app()
 
@@ -136,6 +157,10 @@ def publish(json, topic_prefix):
                 val["dev_cla"] = SENSOR_TYPES[str(item["value_type"])][2]
             else:
                 val["icon"] = SENSOR_ICONS[str(item["value_type"])][0]
+
+            # Set value template if such exists
+            if VALUE_TEMPLATES[str(item["value_type"])]:
+                val["val_tpl"] = VALUE_TEMPLATES[str(item["value_type"])]
 
             logging.debug("publishing to broker: '%s' '%s'", t, str(val))
             CLIENT.publish(topic=t, payload=str(val).replace("'", '"'), retain=True)
