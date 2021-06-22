@@ -5,6 +5,8 @@ import paho.mqtt.client as mqtt
 import bottle
 import logging
 import os
+import signal
+import sys
 
 # TODO separate routes and logic
 
@@ -254,7 +256,15 @@ def run_server():
     bottle.run(app=application, host="0.0.0.0", port=HTTP_PORT, reloader=True)
 
 
+def sigterm_handler(signo, stack_frame):
+    logging.debug("Processing SIGTERM, %s, %s" % (signo, stack_frame))
+    sys.exit(0)
+
+
 if __name__ == "__main__":
+    """ Hook our sigterm handler """
+    signal.signal(signal.SIGTERM, sigterm_handler)
+
     """ Init loglevel and errorcheck it """
     global LOG_LEVEL
     LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
