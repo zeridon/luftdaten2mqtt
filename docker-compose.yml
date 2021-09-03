@@ -1,0 +1,19 @@
+---
+# Simple testing setup
+version: "3.7"
+
+services:
+  luftdaten2mqtt:
+    image: luftdaten2mqtt:latest
+    build:
+      context: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "mqtt"
+    environment:
+      MQTT_HOST: "mqtt"
+
+  mqtt:
+    image: eclipse-mosquitto:2
+    command: ["/usr/sbin/mosquitto", "-c", "/mosquitto-no-auth.conf"]
