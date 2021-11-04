@@ -119,11 +119,12 @@ def route_luftdaten_json2mqtt():
     json_req = bottle.request.json
     logging.debug("json req received %s", json_req)
 
+    device_address = bottle.request.environ.get("HTTP_X_FORWARDED_FOR") or bottle.request.environ.get("REMOTE_ADDR")
     if bottle.request.headers.get("X-Mac-Id"):
-        publish(json_req, MQTT_TOPIC + bottle.request.headers.get("X-Mac-Id"))
+        publish(json_req, MQTT_TOPIC + bottle.request.headers.get("X-Mac-Id"), device_address)
 
 
-def publish(json, topic_prefix):
+def publish(json, topic_prefix, device_address):
     """ Publish to mqtt whatever we can/want"""
 
     if json["software_version"]:
@@ -159,6 +160,7 @@ def publish(json, topic_prefix):
                     "mdl": "DIY " + str(bottle.request.headers.get("X-Sensor")),
                     "sw": json["software_version"],
                     "mf": "DIY Luftdaten",
+                    "cu": "http://" + str(device_address),
                 },
                 "exp_aft": 1.2 * interval,
             }
