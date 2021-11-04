@@ -163,6 +163,7 @@ def publish(json, topic_prefix, device_address):
                     "cu": "http://" + str(device_address),
                 },
                 "exp_aft": 1.2 * interval,
+                "entity_category": "diagnostic",
             }
 
             # set device class if available, else set an icon to be better
