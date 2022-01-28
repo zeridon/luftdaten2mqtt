@@ -108,6 +108,31 @@ VALUE_TEMPLATES = {
     SENSOR_PMS_P2: TEMPLATE_MICROGRAM,
 }
 
+# Map for state classes
+STATE_CLASSES = {
+    SENSOR_TEMPERATURE: ["measurement"],
+    SENSOR_HUMIDITY: ["measurement"],
+    SENSOR_BME280_TEMPERATURE: ["measurement"],
+    SENSOR_BME280_HUMIDITY: ["measurement"],
+    SENSOR_BME280_PRESSURE: ["measurement"],
+    SENSOR_BMP_TEMPERATURE: ["measurement"],
+    SENSOR_BMP_PRESSURE: ["measurement"],
+    SENSOR_BMP280_TEMPERATURE: ["measurement"],
+    SENSOR_BMP280_PRESSURE: ["measurement"],
+    SENSOR_PM1: ["measurement"],
+    SENSOR_PM2: ["measurement"],
+    SENSOR_HTU21D_TEMPERATURE: ["measurement"],
+    SENSOR_HTU21D_HUMIDITY: ["measurement"],
+    SENSOR_SPS30_P0: ["measurement"],
+    SENSOR_SPS30_P2: ["measurement"],
+    SENSOR_SPS30_P4: ["measurement"],
+    SENSOR_SPS30_P1: ["measurement"],
+    SENSOR_PMS_P0: ["measurement"],
+    SENSOR_PMS_P1: ["measurement"],
+    SENSOR_PMS_P2: ["measurement"],
+    SENSOR_WIFI_SIGNAL: [None],
+    SENSOR_RSSI: [None],
+}
 
 application = bottle.default_app()
 
@@ -176,6 +201,10 @@ def publish(json, topic_prefix, device_address):
             # Set value template if such exists
             if str(item["value_type"]) in VALUE_TEMPLATES:
                 val["val_tpl"] = str(VALUE_TEMPLATES[str(item["value_type"])])
+
+            # set state class if available
+            if STATE_CLASSES[str(item["value_type"])][0]:
+                val["stat_cla"] = STATE_CLASSES[str(item["value_type"])][0]
 
             logging.debug("publishing to broker: '%s' '%s'", t, str(val))
             CLIENT.publish(topic=t, payload=str(val).replace("'", '"'), retain=True)
