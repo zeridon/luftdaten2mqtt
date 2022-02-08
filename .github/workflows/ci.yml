@@ -22,6 +22,8 @@ jobs:
             type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'master') }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
