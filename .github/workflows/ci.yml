@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup caching
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             /tmp/.buildx-cache
