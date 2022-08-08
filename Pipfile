@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-bottle = "==0.12.21"
+bottle = "==0.12.23"
 paho-mqtt = "==1.6.1"
 
 [dev-packages]
