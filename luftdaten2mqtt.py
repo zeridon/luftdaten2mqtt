@@ -187,7 +187,7 @@ def publish(json, topic_prefix, device_address):
                     "mf": "DIY Luftdaten",
                     "cu": "http://" + str(device_address),
                 },
-                "exp_aft": 1.2 * interval,
+                "exp_aft": 4 * interval,
                 "entity_category": "diagnostic",
             }
 
