@@ -150,7 +150,7 @@ def route_luftdaten_json2mqtt():
 
 
 def publish(json, topic_prefix, device_address):
-    """ Publish to mqtt whatever we can/want"""
+    """Publish to mqtt whatever we can/want"""
 
     if json["software_version"]:
         t = topic_prefix + "/firmware"
@@ -189,6 +189,12 @@ def publish(json, topic_prefix, device_address):
                 },
                 "exp_aft": 4 * interval,
                 "entity_category": "diagnostic",
+                # add origin as per: https://github.com/home-assistant/core/pull/98782
+                "o": {
+                    "name": "luftdaten2mqtt",
+                    "sw": "1.1.6",
+                    "url": "https://github.com/zeridon/luftdaten2mqtt/issues",
+                },
             }
 
             # set device class if available, else set an icon to be better
@@ -257,7 +263,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def setup():
-    """ Port to listen on """
+    """Port to listen on"""
     global HTTP_PORT
     HTTP_PORT = os.getenv("HTTP_PORT", "8080")
 
@@ -294,7 +300,7 @@ def sigterm_handler(signo, stack_frame):
 
 
 if __name__ == "__main__":
-    """ Hook our sigterm handler """
+    """Hook our sigterm handler"""
     signal.signal(signal.SIGTERM, sigterm_handler)
 
     """ Init loglevel and errorcheck it """
