@@ -182,7 +182,7 @@ def publish(json, topic_prefix, device_address):
                 "dev": {
                     "ids": [str(topic_prefix).split("/")[-1].lower()],
                     "name": dev_name,
-                    "mdl": "DIY " + str(bottle.request.headers.get("X-Sensor")),
+                    "mdl": "DIY " + str(bottle.request.headers.get("X-Sensor").split("-")[1]),
                     "sw": json["software_version"],
                     "mf": "DIY Luftdaten",
                     "cu": "http://" + str(device_address),
