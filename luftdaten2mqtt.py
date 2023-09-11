@@ -173,7 +173,7 @@ def publish(json, topic_prefix, device_address):
             t = "homeassistant/sensor/" + uniq_id + "/config"
             val = {
                 "~": topic_prefix,
-                "name": dev_name + " " + str(SENSOR_TYPES[str(item["value_type"])][0]),
+                "name": str(SENSOR_TYPES[str(item["value_type"])][0]),
                 "stat_t": "~/" + str(item["value_type"]),
                 "frc_upd": "False",
                 "qos": 0,
