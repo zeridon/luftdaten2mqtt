@@ -21,7 +21,7 @@ jobs:
           key: buildx|${{ secrets.CACHE_DATE }}|${{ runner.os }}
       - name: Docker Meta
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: zeridon/luftdaten2mqtt
           tags: |
