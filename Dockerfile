@@ -12,4 +12,5 @@ HEALTHCHECK \
 	--timeout=2s \
 	CMD wget -q -T5 -O- http://localhost:8080/status | grep OK || exit 1
 
-ENTRYPOINT [ "python", "/app/luftdaten2mqtt.py" ]
+# Use command instead of entrypoint to allow custom commands
+CMD [ "python3", "/app/luftdaten2mqtt.py" ]
