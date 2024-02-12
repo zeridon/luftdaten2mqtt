@@ -19,6 +19,7 @@ Settings are controled via environment variables. The following variables are av
 | MQTT_USER | user | Username to use when connecting to MQTT Broker |
 | MQTT_PASS | pass | Password to use when connecting to MQTT Broker |
 | MQTT_TOPIC | luftdaten/ | Base topic to which to submit data |
+| LOG_LEVEL | DEBUG | Verbosity level for logging (DEBUG, INFO, NOTICE, ERROR) |
 
 # How to configure a luftdaten Sensor
 Luftdaten sensors have an option to configure custom api to which to send the data. The proper configuration is as follows:
@@ -31,7 +32,6 @@ Luftdaten sensors have an option to configure custom api to which to send the da
 
 # TODO
  * Add more env parameters for better configurability
- * Add support for user/password
 
 # Performance
 Not really tested but with simplistic load test performs good enough. My current network is 6 sensors and so far i have seen no issues.

@@ -193,7 +193,7 @@ def publish(json, topic_prefix, device_address):
                 # add origin as per: https://github.com/home-assistant/core/pull/98782
                 "o": {
                     "name": "luftdaten2mqtt",
-                    "sw": "1.1.6",
+                    "sw": "2.0.2",
                     "url": "https://github.com/zeridon/luftdaten2mqtt/issues",
                 },
             }
