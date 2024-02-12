@@ -151,6 +151,7 @@ def route_luftdaten_json2mqtt():
 
 def publish(json, topic_prefix, device_address):
     """Publish to mqtt whatever we can/want"""
+    topic_prefix = topic_prefix.replace(":", "-")
 
     if json["software_version"]:
         t = topic_prefix + "/firmware"
