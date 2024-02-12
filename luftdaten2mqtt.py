@@ -239,27 +239,27 @@ def route_index():
 """on_connect handler to disconnect and die in case of error"""
 
 
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code == 0:
         logging.info("Connected to broker %s", MQTT_HOST)
-    elif rc == 1:
-        logging.error("Can't connect to MQTT Broker %s. Incorrect protocol", MQTT_HOST)
-        os._exit(rc)
-    elif rc == 2:
-        logging.error("MQTT Broker %s Refused connection. Invalid Client ID", MQTT_HOST)
-        os._exit(rc)
-    elif rc == 3:
-        logging.error("MQTT Broker %s available ", MQTT_HOST)
-        os._exit(rc)
-    elif rc == 4:
-        logging.error("MQTT Broker %s Refused connection. Bad Username/Password", MQTT_HOST)
-        os._exit(rc)
-    elif rc == 5:
-        logging.error("MQTT Broker %s Refused connection. Not Authorized", MQTT_HOST)
-        os._exit(rc)
+    elif reason_code == "Unsupported protocol version":
+        logging.error("Can't connect to MQTT Broker %s. Unsupported protocol version", MQTT_HOST)
+        os._exit(1)
+    elif reason_code == "Client identifier not valid":
+        logging.error("MQTT Broker %s Refused connection. Client identifier not valid", MQTT_HOST)
+        os._exit(2)
+    elif reason_code == "Server unavailable":
+        logging.error("MQTT Broker %s Server unavailable", MQTT_HOST)
+        os._exit(3)
+    elif reason_code == "Bad user name or password":
+        logging.error("MQTT Broker %s Refused connection. Bad user name or password", MQTT_HOST)
+        os._exit(4)
+    elif reason_code == "Not authorized":
+        logging.error("MQTT Broker %s Refused connection. Not authorized", MQTT_HOST)
+        os._exit(5)
     else:
-        logging.info("Reserved error code (%s), from Broker %s", rc, MQTT_HOST)
-        os._exit(rc)
+        logging.info("Reserved error code (%s), from Broker %s", reason_code, MQTT_HOST)
+        os._exit(99)
 
 
 def setup():
@@ -279,7 +279,7 @@ def setup():
 
     logging.debug("connecting to mqtt broker %s", MQTT_HOST)
     global CLIENT
-    CLIENT = mqtt.Client(clean_session=True)
+    CLIENT = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, clean_session=True)
 
     CLIENT.on_connect = on_connect
     if MQTT_USER and MQTT_PASS:
