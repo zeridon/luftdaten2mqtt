@@ -1,2 +1,2 @@
-bottle==0.13.1
+bottle==0.13.2
 paho-mqtt==2.1.0
